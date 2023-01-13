@@ -14,6 +14,8 @@ const todos = [
 ];
 
 function App() {
+  searchValue, setSearchValue;
+
   return (
     <React.Fragment>
       <TodoCounter />
@@ -22,9 +24,9 @@ function App() {
       <TodoList>
         {todos.map((todo) => (
           <TodoItem
-          key={todo.text} 
-          text={todo.text}
-          completed={todo.completed}
+            key={todo.text}
+            text={todo.text}
+            completed={todo.completed}
           />
         ))}
       </TodoList>
