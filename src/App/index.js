@@ -9,31 +9,32 @@ import { AppUI } from "./AppUI";
 //  { text: "LALALALALA", completed: false },
 //];
 
-function useLocalStorage(itemName) {
-  const localStorageItem = localStorage.getItem("itemName");
+function useLocalStorage(itemName, initialValue) {
+  const localStorageItem = localStorage.getItem(itemName);
   let parsedItem;
 
   if (!localStorageItem) {
-    localStorage.setItem("itemName", JSON.stringify([]));
-    parsedItem = [];
+    localStorage.setItem(itemName, JSON.stringify(initialValue));
+    parsedItem = initialValue;
   } else {
     parsedItem = JSON.parse(localStorageItem);
   }
 
-  const [item, setTodos] = React.useState(parsedItem);
+  const [item, setItem] = React.useState(parsedItem);
 
-  const saveTodos = (newTodos) => {
-    const stringifiedTodos = JSON.stringify(newTodos);
-    localStorage.setItem("TODOS_V1", stringifiedTodos);
-    setTodos(newTodos);
+  const saveItem = (newItem) => {
+    const stringifiedItem = JSON.stringify(newItem);
+    localStorage.setItem(itemName, stringifiedItem);
+    setItem(newItem);
   };
+
+  return [item, saveItem];
 }
 
 function App() {
-  const [todos, saveTodos] = useLocalStorage("TODOS_V1");
-
+  const [patito, savePatito] = useLocalStorage("patito_V1", "fernando");
+  const [todos, saveTodos] = useLocalStorage("TODOS_V1", []);
   const [searchValue, setSearchValue] = React.useState("");
-
   const completedTodos = todos.filter((todo) => !!todo.completed).length;
   const totalTodos = todos.length;
 
@@ -51,19 +52,20 @@ function App() {
 
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text);
-    const newTodos = [...todos];
-    newTodos[todoIndex].completed = true;
-    saveTodos(newTodos);
+    const newItem = [...todos];
+    newItem[todoIndex].completed = true;
+    saveTodos(newItem);
   };
 
   const deleteTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text);
-    const newTodos = [...todos];
-    newTodos.splice(todoIndex, 1);
-    saveTodos(newTodos);
+    const newItem = [...todos];
+    newItem.splice(todoIndex, 1);
+    saveTodos(newItem);
   };
 
-  return (
+  return [
+    <p>{patito}</p>,
     <AppUI
       totalTodos={totalTodos}
       completedTodos={completedTodos}
@@ -73,7 +75,7 @@ function App() {
       completeTodo={completeTodo}
       deleteTodo={deleteTodo}
     />
-  );
+  ];
 }
 
 export default App;
