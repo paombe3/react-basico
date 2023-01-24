@@ -4,7 +4,6 @@ import './TodoForm.css';
 
 function TodoForm() {
   const [newTodoValue, setNewTodoValue] = React.useState("");
-
   const { 
     addTodo,
     setOpenModal,
@@ -20,7 +19,6 @@ function TodoForm() {
     event.preventDefault();
     addTodo(newTodoValue);
     setOpenModal(false);
-    setNewTodoValue("");
   };
 
   return (
